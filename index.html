@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clever Chat App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Clever Chatbot</h1>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+    <ul id="messages"></ul>
+
+    <script>
+        var socket = io();
+        
+        socket.on('connect', function() {
+            console.log('Connected');
+        });
+        
+        socket.on('message', function(data) {
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(data.user + ": " + data.msg));
+            document.getElementById("messages").appendChild(li);
+        });
+        
+        function sendMessage() {
+            var msg = document.getElementById('messageInput').value;
+            socket.send(msg);
+            document.getElementById('messageInput').value = '';
+        }
+    </script>
+</body>
+</html>
